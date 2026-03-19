@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Arizona Master TECH - Boutique</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<header class="bg-gray-900 text-white p-6 text-center">
+  <h1 class="text-3xl font-bold">Arizona Master TECH</h1>
+  <p>Boutique informatique en ligne</p>
+</header>
+
+<!-- Catalogue -->
+<section class="py-12 px-6">
+  <h2 class="text-2xl font-bold text-center mb-10">Nos Produits</h2>
+  <div id="products" class="grid md:grid-cols-3 gap-6"></div>
+</section>
+
+<!-- Panier -->
+<section class="bg-gray-100 py-12 px-6">
+  <h2 class="text-2xl font-bold text-center mb-6">Panier</h2>
+  <div id="cart" class="max-w-xl mx-auto"></div>
+  <p class="text-center font-bold mt-4" id="total"></p>
+  <div class="text-center mt-6">
+    <button onclick="checkout()" class="bg-green-600 text-white px-6 py-3 rounded-xl">Commander via WhatsApp</button>
+  </div>
+</section>
+
+<!-- Formulaire livraison -->
+<section class="py-12 px-6 text-center">
+  <h2 class="text-2xl font-bold mb-4">Informations de livraison</h2>
+  <input id="name" placeholder="Nom" class="border p-2 m-2">
+  <input id="address" placeholder="Quartier / Adresse" class="border p-2 m-2">
+</section>
+
+<footer class="bg-gray-900 text-white text-center p-6">
+  <p>&copy; 2026 Arizona Master TECH</p>
+</footer>
+
+<script>
+const products = [
+  {name: "Laptop HP i5", price: 350000},
+  {name: "Imprimante HP", price: 120000},
+  {name: "Routeur WiFi", price: 25000},
+  {name: "Clavier + Souris", price: 15000},
+  {name: "Disque SSD 512GB", price: 40000},
+  {name: "Casque Audio", price: 10000}
+];
+
+let cart = [];
+
+function displayProducts() {
+  let html = "";
+  products.forEach((p, i) => {
+    html += `
+      <div class="bg-white p-4 rounded-xl shadow">
+        <h3 class="font-bold">${p.name}</h3>
+        <p class="text-orange-500 font-bold">${p.price} FCFA</p>
+        <button onclick="addToCart(${i})" class="mt-2 bg-blue-600 text-white px-4 py-2 rounded">Ajouter</button>
+      </div>
+    `;
+  });
+  document.getElementById("products").innerHTML = html;
+}
+
+function addToCart(index) {
+  cart.push(products[index]);
+  displayCart();
+}
+
+function displayCart() {
+  let html = "";
+  let total = 0;
+
+  cart.forEach((item, i) => {
+    total += item.price;
+    html += `<p>${item.name} - ${item.price} FCFA</p>`;
+  });
+
+  document.getElementById("cart").innerHTML = html;
+  document.getElementById("total").innerText = "Total : " + total + " FCFA";
+}
+
+function checkout() {
+  let name = document.getElementById("name").value;
+  let address = document.getElementById("address").value;
+
+  let message = "Commande:%0A";
+  let total = 0;
+
+  cart.forEach(item => {
+    message += "- " + item.name + " (%0A";
+    total += item.price;
+  });
+
+  message += "%0ATotal: " + total + " FCFA";
+  message += "%0ANom: " + name;
+  message += "%0AAdresse: " + address;
+  message += "%0APaiement: Orange Money / Moov / Wave";
+
+  let url = "https://wa.me/22607347901?text=" + message;
+  window.open(url, '_blank');
+}
+
+displayProducts();
+</script>
+
+</body>
+</html>
